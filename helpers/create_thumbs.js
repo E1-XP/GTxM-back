@@ -2,6 +2,8 @@ const fs = require('fs'),
     path = require('path'),
     jimp = require('jimp');
 
+const errorHandler = require("./error");
+
 module.exports = function createThumbnails(width) {
 
     for (let i = 1; i <= 5; i += 1) {
@@ -17,7 +19,7 @@ module.exports = function createThumbnails(width) {
                 jimp.read(path.join(dirPath, file))
                     .then(img => img.resize(width, jimp.AUTO)
                         .write(path.join(dirPath, `../thumbnails/${i}/`, thumbName)))
-                    .catch(err => console.log(err));
+                    .catch(errorHandler);
             }
         }
 

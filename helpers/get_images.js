@@ -2,13 +2,15 @@ const fs = require("fs"),
   path = require("path");
 const db = require("../models");
 
+const errorHandler = require('./error');
+
 module.exports = function getImages(req, res) {
   const { dir } = req.params;
   const pathParam = path.join(__dirname, `../assets/img/${dir}`);
 
   getImagesCore(pathParam, dir).then(images =>
     res.status(200).json({ images })
-  );
+  ).catch(errorHandler)
 };
 
 function getImagesCore(dirPath, dirId = 1) {
@@ -54,12 +56,12 @@ function getImagesCore(dirPath, dirId = 1) {
 
             res(data);
           })
-          .catch(err => console.log(err));
+          .catch(errorHandler);
       });
     })(data);
   }
 
   return populateImageDataWithObjects()
     .then(updateLikesFieldForEachImageData)
-    .catch(err => console.log(err));
+    .catch(errorHandler);
 }
